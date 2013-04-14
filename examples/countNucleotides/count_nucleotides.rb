@@ -20,13 +20,11 @@ class Base
 
 end
 
-def countLetter(atgc)
-  Pipeline::Pipe.new.keeping(Base.same(atgc)).count
-end
+count_letter = -> (atgc) { Pipeline::Pipe.new.keeping(Base.same(atgc)).count }
 
 bases = "ATGC".chars
 
-pipes = bases.each_with_object({}) {|atgc, hash| hash[atgc] = countLetter(atgc)}
+pipes = bases.each_with_object({}) {|atgc, hash| hash[atgc] = count_letter.call(atgc) }
 
 pipe = Pipeline::Pipe.new.through(Base.constructor).split(pipes)
 
