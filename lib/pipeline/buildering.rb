@@ -1,4 +1,5 @@
 require_relative 'counting_end_piece'
+require_relative 'last_end_piece'
 require_relative 'end_piece'
 require_relative 'inlet'
 require_relative 'joint_piece'
@@ -26,12 +27,20 @@ module Pipeline
       attach(map_function(transform))
     end
 
+    def custom(piece)
+       attach(piece)
+    end
+
     def expand(transform)
       attach(expand_function(transform))
     end
 
     def split(paths)
       answer_int(JointPiece.new(paths))
+    end
+
+    def last
+      answer_int(LastEndPiece.new)
     end
 
     module_function
@@ -72,5 +81,6 @@ module Pipeline
         end
       end
     end
+
   end
 end
