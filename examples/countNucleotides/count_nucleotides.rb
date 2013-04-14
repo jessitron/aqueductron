@@ -20,14 +20,23 @@ class Base
 
 end
 
+def countLetter(atgc)
+  Pipeline::Pipe.new.keeping(Base.same(atgc)).count
+end
+
 pipe = Pipeline::Pipe.new.through(Base.constructor).split(
-  A: Pipeline::Pipe.new.keeping(Base.same("A")).count,
-  C: Pipeline::Pipe.new.keeping(Base.same("C")).count
+  A: countLetter("A"),
+  C: countLetter("C"),
+  G: countLetter("G"),
+  T: countLetter("T"),
 )
 
 result = pipe.flow(input.chars)
 
 a_count = result.value(:A)
 c_count = result.value(:C)
+g_count = result.value(:G)
+t_count = result.value(:T)
 
-puts "#{a_count} #{c_count}"
+puts "A C T G"
+puts "#{a_count} #{c_count} #{t_count} #{g_count}"
