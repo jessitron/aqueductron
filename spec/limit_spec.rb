@@ -36,6 +36,16 @@ module Pipeline
         it { should == 'three'}
       end
 
+      describe 'can be limited to 1' do
+        let (:how_many) { 1}
+        it { should == 'one'}
+      end
+
+      describe 'zero always gets no data' do
+        let(:how_many) {0}
+        it { should == :no_data}
+      end
+
     end
   end
 end

@@ -52,17 +52,12 @@ module Pipeline
           piece.pass_on(msg, take_function(how_many -1))
         end
       end
-      what_to_do
     end
 
     def expand_function(expansion)
       ->(piece, msg) do
         next_piece = Inlet.new(piece.destination, :not_done).flow(expansion.call(msg))
-        if (next_piece.result?) then
-          next_piece
-        else
-          Piece.new(next_piece, expand_function(expansion))
-        end
+        Piece.new(next_piece, expand_function(expansion))
       end
     end
 

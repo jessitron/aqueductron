@@ -20,7 +20,11 @@ module Pipeline
 
     def pass_on(msg, what_to_do_next)
       next_destination = @destination.receive(msg)
-      Piece.new(next_destination, what_to_do_next)
+      if (next_destination.result?) then
+        next_destination
+      else
+        Piece.new(next_destination, what_to_do_next)
+      end
     end
     def send_eof
       @destination.eof
