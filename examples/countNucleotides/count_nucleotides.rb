@@ -24,19 +24,13 @@ def countLetter(atgc)
   Pipeline::Pipe.new.keeping(Base.same(atgc)).count
 end
 
-pipe = Pipeline::Pipe.new.through(Base.constructor).split(
-  A: countLetter("A"),
-  C: countLetter("C"),
-  G: countLetter("G"),
-  T: countLetter("T"),
-)
+bases = "ATGC".chars
+
+pipes = bases.each_with_object({}) {|atgc, hash| hash[atgc] = countLetter(atgc)}
+
+pipe = Pipeline::Pipe.new.through(Base.constructor).split(pipes)
 
 result = pipe.flow(input.chars)
 
-a_count = result.value(:A)
-c_count = result.value(:C)
-g_count = result.value(:G)
-t_count = result.value(:T)
-
-puts "A C T G"
-puts "#{a_count} #{c_count} #{t_count} #{g_count}"
+puts bases.join(" ")
+puts bases.map { |atgc| result.value(atgc)}.join(" ")
