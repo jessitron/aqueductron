@@ -54,3 +54,21 @@ describe 'the learning of k = 3' do
     it { should == 19 }
   end
 end
+
+describe 'the learning of k is approximately 3' do
+  # 1, 1
+  # then k = 2, so f(3) = 1 + (1 * 2) = 3
+  # then k = 4, so f(4) = 3 + (1 * 4) = 7
+  # and then unknown. We'll average k to 3 and predict 7 + (3 * 3) = 16
+  subject { Object.new.extend(Fibonacci).rabbits([1,1,3,7],n) }
+
+  context ('4') do
+    let(:n) { 4 }
+    it { should == 7 }
+  end
+  context ('5') do
+    let(:n) { 5 }
+    it { should == 16 }
+  end
+end
+

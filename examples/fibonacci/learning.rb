@@ -7,6 +7,23 @@ require_relative '../../lib/pipeline'
 #
 
 module Fibonacci
+  def rabbits(input, n)
+    Pipeline::Pipe.new.custom(empty_fib_function).take(n).last.flow(look_at_this(input)).value
+  end
+
+  def look_at_this(rabbits_by_month)
+    StuffAndThen.new(rabbits_by_month).lazy
+  end
+
+  private
+  def estimate_k(first, second, third) #consecutive terms
+    (third - second) / first
+  end
+
+  def add_data_point(average_so_far, data_points_included, new_data_point)
+    (average_so_far * data_points_included + new_data_point) / (data_points_included + 1)
+  end
+
   class StuffAndThen
     def initialize(stuff)
       @stuff = stuff
@@ -22,16 +39,19 @@ module Fibonacci
     end
   end
 
-  def look_at_this(rabbits_by_month)
-    StuffAndThen.new(rabbits_by_month).lazy
-  end
 
   def fib_function
-    ->(prev_number, prev_prev_number, k = 1) do
+    ->(prev_number, prev_prev_number, k = 1, data_points_in_k = 1) do
       ->(piece,msg) do
-        current_val = prev_number + ( prev_prev_number * k )
-        #puts("OK, I just got #{prev_number} and am adding it to #{prev_number} * #{k}")
-        piece.pass_on(current_val, fib_function.call(current_val, prev_number, k))
+        if (msg == :unknown)
+          current_val = prev_number + ( prev_prev_number * k )
+          #puts("OK, I just got #{prev_number} and am adding it to #{prev_number} * #{k}")
+          piece.pass_on(current_val, fib_function.call(current_val, prev_number, k))
+        else
+          this_k = estimate_k(prev_prev_number, prev_number, msg)
+          average_k = add_data_point(k, data_points_in_k, this_k)
+          piece.pass_on(msg, fib_function.call(msg, prev_number, average_k, data_points_in_k + 1))
+        end
       end
     end
   end
@@ -53,12 +73,9 @@ module Fibonacci
     ->(first,second) do
       ->(piece,msg) do
         k = (msg - second) / first
-        piece.pass_on(msg, fib_function.call(msg, second, k))
+        piece.pass_on(msg, fib_function.call(msg, second, k, 1))
       end
     end
   end
 
-  def rabbits(input, n)
-    Pipeline::Pipe.new.custom(empty_fib_function).take(n).last.flow(look_at_this(input)).value
-  end
 end
