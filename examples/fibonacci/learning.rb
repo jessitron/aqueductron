@@ -39,22 +39,22 @@ module Fibonacci
     end
   end
 
-
   def learning_fib_function(prev_number, prev_prev_number, k = 1, data_points_in_k = 1)
-      ->(piece,msg) do
-        if (msg == :unknown)
-          fib_function(prev_number, prev_prev_number, k).call(piece,msg)
-        else
-          this_k = estimate_k(prev_prev_number, prev_number, msg)
-          average_k = add_data_point(k, data_points_in_k, this_k)
-          piece.pass_on(msg, learning_fib_function(msg, prev_number, average_k, data_points_in_k + 1))
-        end
+    ->(piece,msg) do
+      if (msg == :unknown)
+        fib_function(prev_number, prev_prev_number, k).call(piece,msg)
+      else
+        this_k = estimate_k(prev_prev_number, prev_number, msg)
+        average_k = add_data_point(k, data_points_in_k, this_k)
+        piece.pass_on(msg, learning_fib_function(msg, prev_number, average_k, data_points_in_k + 1))
       end
+    end
   end
+
   def fib_function(prev_number, prev_prev_number, k = 1)
-      ->(piece,msg) do # msg is ignored
-        current_val = prev_number + ( prev_prev_number * k )
-        piece.pass_on(current_val, fib_function(current_val, prev_number, k))
+    ->(piece, _) do # msg is ignored
+      current_val = prev_number + ( prev_prev_number * k )
+      piece.pass_on(current_val, fib_function(current_val, prev_number, k))
     end
   end
 
@@ -66,15 +66,14 @@ module Fibonacci
 
   def one_data_fib_function(first)
     ->(piece,msg) do
-        piece.pass_on(msg, two_data_fib_function(first, msg))
-      end
+      piece.pass_on(msg, two_data_fib_function(first, msg))
+    end
   end
 
   def two_data_fib_function(first,second)
-      ->(piece,msg) do
-        k = (msg - second) / first
-        piece.pass_on(msg, learning_fib_function(msg, second, k, 1))
-      end
+    ->(piece,msg) do
+      k = (msg - second) / first
+      piece.pass_on(msg, learning_fib_function(msg, second, k, 1))
+    end
   end
-
 end
