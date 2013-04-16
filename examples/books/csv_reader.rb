@@ -1,5 +1,5 @@
 require 'csv'
-require_relative 'improved_hash'
+require_relative '../../lib/improved_hash'
 
 class CsvReader
   include Enumerable
