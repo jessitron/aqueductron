@@ -1,4 +1,4 @@
-module Pipeline
+module Aqueductron
   class Inlet
     def initialize(next_piece, done_or_not = :done)
       @next_piece = next_piece

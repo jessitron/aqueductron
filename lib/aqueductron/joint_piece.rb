@@ -1,7 +1,7 @@
 require_relative 'compound_result'
 require_relative 'piece_common'
 
-module Pipeline
+module Aqueductron
   class JointPiece
     def initialize(paths)
       @paths = paths

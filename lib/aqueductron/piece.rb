@@ -1,6 +1,6 @@
 require_relative 'piece_common'
 
-module Pipeline
+module Aqueductron
   class Piece
     attr_reader :destination
     include PieceCommon

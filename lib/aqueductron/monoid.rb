@@ -1,4 +1,4 @@
-module Pipeline
+module Aqueductron
   class Monoid
     attr_reader :zero
     def initialize(zero, add_lambda)

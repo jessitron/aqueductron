@@ -1,6 +1,6 @@
 require_relative 'piece_common'
 
-module Pipeline
+module Aqueductron
   class CountingEndPiece
     include PieceCommon
     def initialize(so_far = 0)

@@ -1,4 +1,4 @@
-module Pipeline
+module Aqueductron
   module PieceCommon
     def flow(source)
       Inlet.new(self).flow_internal(source.each)

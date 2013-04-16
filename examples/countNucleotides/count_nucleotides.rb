@@ -1,4 +1,4 @@
-require_relative '../../lib/pipeline'
+require_relative '../../lib/aqueductron'
 
 # TODO: create a random sequence generator
 input = "AATTGGGGAGCA"
@@ -20,15 +20,15 @@ class Base
 
 end
 
-count_letter = -> (atgc) { Pipeline::Pipe.new.keeping(Base.same(atgc)).count }
+count_letter = -> (atgc) { Aqueductron::Duct.new.keeping(Base.same(atgc)).count }
 
 bases = "ATGC".chars
 
-pipes = bases.each_with_object({}) {|atgc, hash| hash[atgc] = count_letter.call(atgc) }
+ducts = bases.each_with_object({}) {|atgc, hash| hash[atgc] = count_letter.call(atgc) }
 
-pipe = Pipeline::Pipe.new.through(Base.constructor).split(pipes)
+duct = Aqueductron::Duct.new.through(Base.constructor).split(ducts)
 
-result = pipe.flow(input.chars)
+result = duct.flow(input.chars)
 
 puts bases.join(" ")
 puts bases.map { |atgc| result.value(atgc)}.join(" ")
