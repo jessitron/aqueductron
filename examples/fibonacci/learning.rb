@@ -1,4 +1,4 @@
-require_relative '../../lib/pipeline'
+require_relative '../../lib/aqueductron'
 
 # for this problem I need a custom piece.
 # It is a piece that provides a function for the next one in terms of the current one
@@ -8,7 +8,7 @@ require_relative '../../lib/pipeline'
 
 module Fibonacci
   def rabbits(input, n)
-    Pipeline::Pipe.new.custom(empty_fib_function).take(n).last.flow(look_at_this(input)).value
+    Aqueductron::Duct.new.custom(empty_fib_function).take(n).last.flow(look_at_this(input)).value
   end
 
   def look_at_this(rabbits_by_month)

@@ -1,10 +1,10 @@
-require_relative '../lib/pipeline'
+require_relative '../lib/aqueductron'
 
-module Pipeline
-  describe Pipe do
-    describe 'this weird pipeline thing' do
+module Aqueductron
+  describe Duct do
+    describe 'this weird ductline thing' do
       let(:input) { ["one","two","three"]}
-      let(:new_builder) { Pipe.new() }
+      let(:new_builder) { Duct.new() }
       let(:builder) { new_builder }
 
       subject { builder.answer(Monoid.concat).flow(input).value }
@@ -37,7 +37,7 @@ module Pipeline
 
     describe 'interacting with integers' do
       let(:input) { [1,2,3]}
-      let(:new_builder) { Pipe.new() }
+      let(:new_builder) { Duct.new() }
       let(:builder) { new_builder }
 
       subject { builder.flow(input).value }
@@ -47,16 +47,16 @@ module Pipeline
         it { should == 6 }
       end
 
-      describe 'can split the pipe' do
+      describe 'can split the duct' do
         double = ->(a) { a * 2 }
         let(:builder) { new_builder.
-          split({ total: Pipe.new.answer(Monoid.plus),
-                double_the_first: Pipe.new.take(1).through(double).answer(Monoid.plus)})
+          split({ total: Duct.new.answer(Monoid.plus),
+                double_the_first: Duct.new.take(1).through(double).answer(Monoid.plus)})
         }
         it 'should have a total of 6'do
           subject.value(:total).should == 6
         end
-        it 'should have 2 at the end of the doubling the first pipe' do
+        it 'should have 2 at the end of the doubling the first duct' do
           subject.value(:double_the_first).should == 2
         end
       end
@@ -64,10 +64,10 @@ module Pipeline
 
     describe 'interacting with characters' do
       let(:input) {["one","two"]}
-      it 'can widen the pipe' do
+      it 'can widen the duct' do
         array_of_chars = ->(s) {s.each_char}
         is_vowel = ->(c) {"aeiou".include?(c)}
-        result = Pipe.new.
+        result = Duct.new.
           expand(array_of_chars).
           keeping(is_vowel).
           answer(Monoid.concat)
@@ -85,11 +85,11 @@ module Pipeline
       #                       \    :concatenated_again = concatenated: "onetwo"
       #                        \----------------------/
       it 'can nest splits and follow the paths' do
-        result = Pipe.new.
-          split(all_concatenated: Pipe.new.answer(Monoid.concat),
-                all: Pipe.new.
-                split(only_first: Pipe.new.take(1).answer(Monoid.concat),
-                      concatenated_again: Pipe.new.answer(Monoid.concat)
+        result = Duct.new.
+          split(all_concatenated: Duct.new.answer(Monoid.concat),
+                all: Duct.new.
+                split(only_first: Duct.new.take(1).answer(Monoid.concat),
+                      concatenated_again: Duct.new.answer(Monoid.concat)
                      )
                )
                output = result.flow(input)
@@ -102,10 +102,10 @@ module Pipeline
         array_of_chars = ->(s) {s.each_char}
         is_vowel = ->(c) {"aeiou".include?(c)}
         notnot = ->(p) { ->(a) {!p.call(a)}}
-        result = Pipe.new().
+        result = Duct.new().
           expand(array_of_chars).
-          split({ vowels: Pipe.new.keeping(is_vowel).count,
-                consonants: Pipe.new.keeping(notnot.(is_vowel)).count
+          split({ vowels: Duct.new.keeping(is_vowel).count,
+                consonants: Duct.new.keeping(notnot.(is_vowel)).count
         })
         output = result.flow(["one","two", "three"])
         output.value(:vowels).should == 5
