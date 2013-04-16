@@ -1,4 +1,4 @@
-module Pipeline
+module Aqueductron
   module Result
     def result?
       true

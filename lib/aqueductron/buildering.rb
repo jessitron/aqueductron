@@ -5,7 +5,7 @@ require_relative 'inlet'
 require_relative 'joint_piece'
 require_relative 'piece'
 
-module Pipeline
+module Aqueductron
   module Buildering
     def answer(monoid)
       answer_int(EndPiece.new(monoid))

@@ -1,10 +1,10 @@
-require_relative '../lib/pipeline'
+require_relative '../lib/aqueductron'
 
-module Pipeline
-  describe Pipe do
+module Aqueductron
+  describe Duct do
     describe 'the last data point' do
       let(:input) { ["one","two","three"]}
-      let(:new_builder) { Pipe.new() }
+      let(:new_builder) { Duct.new() }
       let(:builder) { new_builder }
 
       subject { builder.last.flow(input).value }
@@ -21,7 +21,7 @@ module Pipeline
     end
     describe 'it can be limited' do
       let(:input) { ["one","two","three"]}
-      let(:new_builder) { Pipe.new() }
+      let(:new_builder) { Duct.new() }
       let(:how_many) { 2 }
       let(:builder) { new_builder }
 

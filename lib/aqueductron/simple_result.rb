@@ -1,6 +1,6 @@
 require_relative 'result'
 
-module Pipeline
+module Aqueductron
   class SimpleResult
     include Result
     def initialize(value)

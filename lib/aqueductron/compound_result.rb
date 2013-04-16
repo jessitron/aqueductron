@@ -1,4 +1,4 @@
-module Pipeline
+module Aqueductron
   class CompoundResult
     include Result
     def initialize(paths)

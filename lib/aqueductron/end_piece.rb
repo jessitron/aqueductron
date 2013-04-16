@@ -1,7 +1,7 @@
 require_relative 'piece_common'
 require_relative 'simple_result'
 
-module Pipeline
+module Aqueductron
   class EndPiece
     include PieceCommon
     def initialize(monoid, so_far = :no_value)

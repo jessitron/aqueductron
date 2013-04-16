@@ -1,4 +1,4 @@
-require_relative '../../lib/pipeline'
+require_relative '../../lib/aqueductron'
 
 # for this problem I need a custom piece.
 # It is a piece that provides a function for the next one in terms of the current one
@@ -21,7 +21,7 @@ fib = ->(n, k=1) do
   if n == 1 then
     1
   else
-    Pipeline::Pipe.new.custom(fib_function.call(1, 0, k)).take(n-1).last.flow(integers.call).value
+    Aqueductron::Duct.new.custom(fib_function.call(1, 0, k)).take(n-1).last.flow(integers.call).value
   end
 end
 
