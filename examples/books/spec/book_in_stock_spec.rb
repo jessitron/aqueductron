@@ -1,4 +1,4 @@
-require_relative '../lib/book_in_stock'
+require_relative '../book_in_stock'
 
 describe BookInStock do
   describe 'this booky mappy function when it works' do
