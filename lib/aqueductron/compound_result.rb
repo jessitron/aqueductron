@@ -5,6 +5,10 @@ module Aqueductron
       @contents = paths
     end
 
+    def keys
+      @contents.keys
+    end
+
     def value(*path)
       return self if path.empty?
       (head, *tail) = path

@@ -7,6 +7,10 @@ module Aqueductron
       @value = value
     end
 
+    def keys
+      []
+    end
+
     def value
       @value
     end
