@@ -4,6 +4,7 @@ require_relative 'end_piece'
 require_relative 'inlet'
 require_relative 'joint_piece'
 require_relative 'piece'
+require_relative 'partition'
 
 module Aqueductron
   module Buildering
@@ -37,6 +38,10 @@ module Aqueductron
 
     def split(paths)
       answer_int(JointPiece.new(paths))
+    end
+
+    def partition(categorize, make_new_path)
+      answer_int(SpontaneousJointPiece.new({}, categorize, make_new_path))
     end
 
     def last
