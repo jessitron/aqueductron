@@ -2,7 +2,7 @@
 require_relative 'compound_result'
 require_relative 'piece_common'
 
-module Pipeline
+module Aqueductron
   class SpontaneousJointPiece
     attr_reader(:paths, :categorize, :make_new_path) # TODO: make private
     def initialize(paths, categorize, make_new_path)
