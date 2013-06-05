@@ -91,7 +91,16 @@ eos
  \\
 eos
     end
+    it ('can draw a not-empty partition list') do
+      draw_array.call(subject.keep_flowing(["A"]).draw).should == <<eos
+ / -\\
+<  A #
+ \\ -/
+   +?
+eos
+    end
   end
+
   describe 'horizontal concatenation' do
     it ('can handle the trivial case of just one') do
       Drawing.horizontal_concat(["blah"],[">"]).should == ["blah>"]

@@ -36,7 +36,9 @@ module Aqueductron
     end
 
     def draw
-      Drawing.horizontal_concat(Drawing.joint_prefix, ["+?"])
+      ducts = @paths.keys.map{ |k| Drawing.horizontal_concat(Drawing.draw_mid_piece(k.to_s), @paths[k].draw) }.flatten(1)
+      paths = (ducts + ["+?"]).flatten
+      Drawing.horizontal_concat(Drawing.joint_prefix, paths)
     end
 
     private
