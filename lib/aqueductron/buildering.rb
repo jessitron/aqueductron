@@ -5,6 +5,7 @@ require_relative 'inlet'
 require_relative 'joint_piece'
 require_relative 'piece'
 require_relative 'partition'
+require_relative 'array_end_piece'
 
 module Aqueductron
   module Buildering
@@ -14,6 +15,10 @@ module Aqueductron
 
     def count
       answer_int(CountingEndPiece.new)
+    end
+
+    def array
+      answer_int(ArrayEndPiece.new)
     end
 
     def take(how_many)
