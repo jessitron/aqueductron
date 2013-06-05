@@ -4,7 +4,7 @@ module Aqueductron
       true
     end
     def inspect
-      "\n" + draw.join("\n")
+      "Result:\n" + draw.join("\n")
     end
   end
 end

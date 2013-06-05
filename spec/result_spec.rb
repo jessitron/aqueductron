@@ -15,7 +15,7 @@ module Aqueductron
     end
     it 'complex result drawing' do
       (CompoundResult.new({ :a => SimpleResult.new(2)}).inspect + "\n").should == <<eos
-
+Result:
  / ---
 <   a => 2
  \\ ---

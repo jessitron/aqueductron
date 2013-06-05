@@ -10,7 +10,7 @@ module Aqueductron
       false
     end
     def inspect
-      "\n" + draw.join("\n")
+      "Duct:\n" + draw.join("\n")
     end
   end
 end
