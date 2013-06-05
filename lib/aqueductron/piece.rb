@@ -1,5 +1,5 @@
 require_relative 'piece_common'
-require_relative 'mid_piece_drawing'
+require_relative 'drawing'
 
 module Aqueductron
   class Piece
@@ -7,7 +7,7 @@ module Aqueductron
     include PieceCommon
 
     def draw
-      MidPieceDrawing.draw(@description)
+      Drawing.draw_mid_piece(@description)
     end
 
     def initialize(destination, what_to_do, description = "~")

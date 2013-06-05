@@ -1,6 +1,6 @@
 require_relative '../lib/aqueductron.rb'
 
-draw_array = ->(a) { a.map { |a| a[1]}.join("\n") + "\n"}
+draw_array = ->(a) { a.join("\n") + "\n"}
 
 # how to say 'all draw methods at all times have the property that the
 # string element in each array is the same length' ?
@@ -53,10 +53,6 @@ eos
     # wish this were a property
     it 'has three times as many elements as paths: 2' do
        Aqueductron::JointPiece.new({ :this => :dummy, :that => :dummy}).draw.size.should == 6
-    end
-
-    it 'does not try to print stuff on the same lines' do
-       Aqueductron::JointPiece.new({ :this => :dummy, :that => :dummy}).draw.map{ |a| a[0]}.uniq.size.should == 6
     end
   end
 end
