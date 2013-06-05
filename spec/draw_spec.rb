@@ -90,6 +90,16 @@ eos
       it 'has three times as many elements as paths: 2' do
        JointPiece.new({ :this => Duct.new.count, :that => Duct.new.last}).draw.size.should == 6
       end
+      it 'looks good with keys of different lengths' do
+       draw_array.call(JointPiece.new({ :this => Duct.new.count, :those => Duct.new.last}).draw).should == <<eos
+   ------\\
+ /  this  #
+<  ------/
+ \\ -------\\
+    those  last
+   -------/
+eos
+      end
     end
   end
 
