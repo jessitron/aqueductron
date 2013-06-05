@@ -59,19 +59,19 @@ eos
     end
     it 'looks right: 1' do
        draw_array.call(JointPiece.new({ :this => Duct.new.count}).draw).should == <<eos
- / ----\\
-<  this #
- \\ ----/
+ / ------\\
+<   this  #
+ \\ ------/
 eos
       end
     it 'looks right: 2' do
        draw_array.call(JointPiece.new({ :this => Duct.new.array, :that => Duct.new.count}).draw).should == <<eos
-   ----\\
- / this []
-<  ----/
- \\ ----\\
-   that #
-   ----/
+   ------\\
+ /  this  []
+<  ------/
+ \\ ------\\
+    that  #
+   ------/
 eos
       end
     # wish this were a property
@@ -93,9 +93,9 @@ eos
     end
     it ('can draw a not-empty partition list') do
       draw_array.call(subject.keep_flowing(["A"]).draw).should == <<eos
- / -\\
-<  A #
- \\ -/
+ / ---\\
+<   A  #
+ \\ ---/
    +?
 eos
     end

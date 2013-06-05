@@ -14,5 +14,13 @@ module Aqueductron
     def value
       @value
     end
+
+    def to_hash
+      @value
+    end
+
+    def draw
+      [ "=> #{@value}"]
+    end
   end
 end

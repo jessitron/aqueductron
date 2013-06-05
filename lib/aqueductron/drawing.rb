@@ -11,6 +11,10 @@ module Aqueductron
        [" / ","<  ", ' \\ ']
     end
 
+    def self.draw_multiple_paths(paths)
+      ducts = paths.keys.map{ |k| Drawing.horizontal_concat(Drawing.draw_mid_piece(" #{k.to_s} "), paths[k].draw) }.flatten(1)
+    end
+
     def self.horizontal_concat(first, second)
       # I <3 Ruby. this kind of recursive ref doesn't work in Scala
       identity = ->(piece,msg) { piece.pass_on(msg, identity)}

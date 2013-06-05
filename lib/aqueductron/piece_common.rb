@@ -9,5 +9,8 @@ module Aqueductron
     def result?
       false
     end
+    def inspect
+      "\n" + draw.join("\n")
+    end
   end
 end
