@@ -1,4 +1,5 @@
 require_relative 'piece_common'
+require_relative 'mid_piece_drawing'
 
 module Aqueductron
   class Piece
@@ -6,10 +7,7 @@ module Aqueductron
     include PieceCommon
 
     def draw
-      dashes = "-" * @description.length
-      [[-1, dashes],
-       [ 0, @description],
-       [ 1, dashes]]
+      MidPieceDrawing.draw(@description)
     end
 
     def initialize(destination, what_to_do, description = "~")

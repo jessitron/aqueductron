@@ -1,5 +1,6 @@
 require_relative 'compound_result'
 require_relative 'piece_common'
+require_relative 'mid_piece_drawing'
 
 module Aqueductron
   class JointPiece
@@ -24,6 +25,15 @@ module Aqueductron
       construct_compound_result(new_map)
     end
 
+
+    def draw
+      desc = @paths.keys[0].to_s
+      dashes = "-" * desc.length
+      [[-1, "/ " + dashes],
+       [ 0, "  " + desc],
+       [ 1, "\ " + dashes]]
+      @paths.keys.map{ |k| MidPieceDrawing.draw(k.to_s)}.flatten(1)
+    end
     private
     def construct_compound_result(paths)
       CompoundResult.new(paths)

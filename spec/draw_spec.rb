@@ -33,6 +33,30 @@ eos
     it 'displays # for counting' do
       draw_array.call(Aqueductron::CountingEndPiece.new.draw).should == "\\ \n #\n/ \n"
     end
+    it 'displays last for last' do
+      draw_array.call(Aqueductron::LastEndPiece.new.draw).should == "\\    \n last\n/    \n"
+
+    end
   end
 
+  describe 'drawing a joint piece' do
+    it 'has three times as many elements as paths: 1' do
+       Aqueductron::JointPiece.new({ :this => :dummy}).draw.size.should == 3
+    end
+    it 'looks right: 1' do #TODO: add growy symbol in front
+       draw_array.call(Aqueductron::JointPiece.new({ :this => :dummy}).draw).should == <<eos
+----
+this
+----
+eos
+    end
+    # wish this were a property
+    it 'has three times as many elements as paths: 2' do
+       Aqueductron::JointPiece.new({ :this => :dummy, :that => :dummy}).draw.size.should == 6
+    end
+
+    it 'does not try to print stuff on the same lines' do
+       Aqueductron::JointPiece.new({ :this => :dummy, :that => :dummy}).draw.map{ |a| a[0]}.uniq.size.should == 6
+    end
+  end
 end
