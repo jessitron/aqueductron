@@ -8,18 +8,18 @@ module Aqueductron
   describe 'The drawing of the pipe' do
     describe 'An ordinary piece' do
       it 'should print the default description' do
-        draw_array.call(Piece.new(:dummy,:dummy).draw).should == <<eos
--
-~
--
+        draw_array.call(Piece.new(LastEndPiece.new,:dummy).draw).should == <<eos
+-\\
+~ last
+-/
 eos
       end
 
     it 'should print a custom description' do
-      draw_array.call(Piece.new(:dummy,:dummy,"hello").draw).should == <<eos
------
-hello
------
+      draw_array.call(Piece.new(CountingEndPiece.new,:dummy,"hello").draw).should == <<eos
+-----\\
+hello #
+-----/
 eos
     end
   end
@@ -27,33 +27,55 @@ eos
   describe 'drawing an end piece' do
     it 'displays the default symbol' do
       # I'd rather have a herefile but my vi deletes trailing spaces!
-      draw_array.call(EndPiece.new(Monoid.plus, :dummy).draw).should == "\\ \n +\n/ \n"
+      draw_array.call(EndPiece.new(Monoid.plus, :dummy).draw).should == <<eos
+\\
+ +
+/
+eos
     end
     #todo: test custom symbol
 
     it 'displays # for counting' do
-      draw_array.call(CountingEndPiece.new.draw).should == "\\ \n #\n/ \n"
+      draw_array.call(CountingEndPiece.new.draw).should == <<eos
+\\
+ #
+/
+eos
     end
     it 'displays last for last' do
-      draw_array.call(LastEndPiece.new.draw).should == "\\    \n last\n/    \n"
+      draw_array.call(LastEndPiece.new.draw).should == <<eos
+\\
+ last
+/
+eos
 
     end
   end
 
   describe 'drawing a joint piece' do
     it 'has three times as many elements as paths: 1' do
-       JointPiece.new({ :this => :dummy}).draw.size.should == 3
+       JointPiece.new({ :this => Duct.new.count}).draw.size.should == 3
     end
-    it 'looks right: 1' do #TODO: add growy symbol in front
-       draw_array.call(JointPiece.new({ :this => :dummy}).draw).should == <<eos
-----
-this
-----
+    it 'looks right: 1' do
+       draw_array.call(JointPiece.new({ :this => Duct.new.count}).draw).should == <<eos
+ / ----\\
+<  this #
+ \\ ----/
+eos
+      end
+    it 'looks right: 2' do
+       draw_array.call(JointPiece.new({ :this => Duct.new.array, :that => Duct.new.count}).draw).should == <<eos
+   ----\\
+ / this []
+<  ----/
+ \\ ----\\
+   that #
+   ----/
 eos
       end
     # wish this were a property
       it 'has three times as many elements as paths: 2' do
-       JointPiece.new({ :this => :dummy, :that => :dummy}).draw.size.should == 6
+       JointPiece.new({ :this => Duct.new.count, :that => Duct.new.last}).draw.size.should == 6
       end
     end
   end

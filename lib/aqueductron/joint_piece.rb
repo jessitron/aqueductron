@@ -27,7 +27,9 @@ module Aqueductron
 
 
     def draw
-      @paths.keys.map{ |k| Drawing.draw_mid_piece(k.to_s)}.flatten(1)
+      prefix = [" / ","<  ", ' \\ ']
+      ducts = @paths.keys.map{ |k| Drawing.horizontal_concat(Drawing.draw_mid_piece(k.to_s), @paths[k].draw) }.flatten(1)
+      Drawing.horizontal_concat(prefix, ducts)
     end
     private
     def construct_compound_result(paths)

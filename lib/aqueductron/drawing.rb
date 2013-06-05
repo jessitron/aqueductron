@@ -5,8 +5,7 @@ module Aqueductron
       [dashes, description, dashes]
     end
     def self.draw_end_piece(symbol)
-      spaces = " " * symbol.length
-      ["\\" + spaces, " #{symbol}", "/" + spaces ]
+      ["\\", " #{symbol}", "/"]
     end
 
     def self.horizontal_concat(first, second)
