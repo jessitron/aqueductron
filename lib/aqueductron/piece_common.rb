@@ -6,6 +6,9 @@ module Aqueductron
     def keep_flowing(source)
       Inlet.new(self).flow_internal(source.each, false)
     end
+    def drip(one_thing)
+      keep_flowing([one_thing])
+    end
     def result?
       false
     end

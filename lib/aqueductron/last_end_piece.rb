@@ -14,7 +14,8 @@ module Aqueductron
       LastEndPiece.new(msg)
     end
     def draw
-      Drawing.draw_end_piece("last")
+      desc = (@most_recent == :no_data)? "last" : "last (#{@most_recent})"
+      Drawing.draw_end_piece(desc)
     end
   end
 end

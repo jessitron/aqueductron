@@ -26,7 +26,6 @@ eos
 
   describe 'drawing an end piece' do
     it 'displays the default symbol' do
-      # I'd rather have a herefile but my vi deletes trailing spaces!
       draw_array.call(EndPiece.new(Monoid.plus, :dummy).draw).should == <<eos
 \\
  +
@@ -42,13 +41,26 @@ eos
 /
 eos
     end
+    it 'displays # counted so far' do
+      draw_array.call(CountingEndPiece.new.drip(".").drip(".").draw).should == <<eos
+\\
+ # (2)
+/
+eos
+    end
     it 'displays last for last' do
       draw_array.call(LastEndPiece.new.draw).should == <<eos
 \\
  last
 /
 eos
-
+    end
+    it 'displays most recent for last, after one has gone' do
+      draw_array.call(LastEndPiece.new.keep_flowing(["boo"]).draw).should == <<eos
+\\
+ last (boo)
+/
+eos
     end
   end
 
@@ -94,7 +106,7 @@ eos
     it ('can draw a not-empty partition list') do
       draw_array.call(subject.keep_flowing(["A"]).draw).should == <<eos
  / ---\\
-<   A  #
+<   A  # (1)
  \\ ---/
    +?
 eos
