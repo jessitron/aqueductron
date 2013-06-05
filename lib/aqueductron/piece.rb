@@ -5,9 +5,17 @@ module Aqueductron
     attr_reader :destination
     include PieceCommon
 
-    def initialize(destination, what_to_do)
+    def draw
+      dashes = "-" * @description.length
+      [[-1, dashes],
+       [ 0, @description],
+       [ 1, dashes]]
+    end
+
+    def initialize(destination, what_to_do, description = "~")
       @destination = destination
       @what_to_do = what_to_do
+      @description = description
     end
 
     def receive(msg)

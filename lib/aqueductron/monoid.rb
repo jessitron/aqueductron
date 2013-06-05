@@ -1,9 +1,10 @@
 module Aqueductron
   class Monoid
-    attr_reader :zero
-    def initialize(zero, add_lambda)
+    attr_reader :zero, :symbol
+    def initialize(zero, add_lambda, symbol = "+")
       @zero = zero
       @append = add_lambda
+      @symbol = symbol
     end
     def append(a,b)
       @append.call(a,b)
