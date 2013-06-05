@@ -24,12 +24,12 @@ module Aqueductron
       send_eof
     end
 
-    def pass_on(msg, what_to_do_next)
+    def pass_on(msg, what_to_do_next, description = "~")
       next_destination = @destination.receive(msg)
       if (next_destination.result?) then
-        next_destination
+        next_destination # not a destination at all; result
       else
-        Piece.new(next_destination, what_to_do_next)
+        Piece.new(next_destination, what_to_do_next, description)
       end
     end
     def send_eof
