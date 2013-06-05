@@ -153,4 +153,15 @@ eos
 
     end
   end
+
+  describe 'the array end piece' do
+    it 'prints its output so far' do
+      draw_array.call(Duct.new.array.keep_flowing([1,2]).draw).should == <<eos
+\\
+ [] ([1, 2])
+/
+eos
+    end
+  end
+
 end

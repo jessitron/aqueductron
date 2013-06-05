@@ -15,7 +15,8 @@ module Aqueductron
     end
 
     def draw
-      Drawing.draw_end_piece("[]")
+      desc = @so_far.empty? ? "[]" : "[] (#{@so_far})"
+      Drawing.draw_end_piece(desc)
     end
 
   end
