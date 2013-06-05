@@ -59,7 +59,8 @@ module Aqueductron
         if (how_many == 0) then # this is a little inefficient. One extra piece of info will be read
           piece.send_eof
         else
-          piece.pass_on(msg, take_function(how_many -1))
+          how_many_more = how_many - 1
+          piece.pass_on(msg, take_function(how_many_more), "taking #{how_many_more}")
         end
       end
     end

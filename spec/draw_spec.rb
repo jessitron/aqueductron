@@ -9,17 +9,17 @@ module Aqueductron
     describe 'An ordinary piece' do
       it 'should print the default description' do
         draw_array.call(Piece.new(LastEndPiece.new,:dummy).draw).should == <<eos
--\\
-~ last
--/
+---\\
+ ~  last
+---/
 eos
       end
 
     it 'should print a custom description' do
       draw_array.call(Piece.new(CountingEndPiece.new,:dummy,"hello").draw).should == <<eos
------\\
-hello #
------/
+-------\\
+ hello  #
+-------/
 eos
     end
   end
@@ -100,6 +100,15 @@ eos
    -------/
 eos
       end
+    end
+  end
+  describe 'the taking function' do
+    it 'counts down' do
+      draw_array.call(Duct.new.take(3).last.drip('.').draw).should == <<eos
+----------\\
+ taking 2  last (.)
+----------/
+eos
     end
   end
 

@@ -7,7 +7,8 @@ module Aqueductron
     include PieceCommon
 
     def draw
-      Drawing.horizontal_concat(Drawing.draw_mid_piece(@description),@destination.draw)
+      desc = " " + @description + " "
+      Drawing.horizontal_concat(Drawing.draw_mid_piece(desc),@destination.draw)
     end
 
     def initialize(destination, what_to_do, description = "~")
