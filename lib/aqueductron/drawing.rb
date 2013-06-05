@@ -7,6 +7,9 @@ module Aqueductron
     def self.draw_end_piece(symbol)
       ["\\", " #{symbol}", "/"]
     end
+    def self.joint_prefix
+       [" / ","<  ", ' \\ ']
+    end
 
     def self.horizontal_concat(first, second)
       # I <3 Ruby. this kind of recursive ref doesn't work in Scala

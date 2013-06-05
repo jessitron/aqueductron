@@ -27,7 +27,7 @@ module Aqueductron
 
 
     def draw
-      prefix = [" / ","<  ", ' \\ ']
+      prefix = Drawing.joint_prefix
       ducts = @paths.keys.map{ |k| Drawing.horizontal_concat(Drawing.draw_mid_piece(k.to_s), @paths[k].draw) }.flatten(1)
       Drawing.horizontal_concat(prefix, ducts)
     end

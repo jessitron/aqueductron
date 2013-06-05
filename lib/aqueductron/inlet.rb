@@ -9,16 +9,16 @@ module Aqueductron
       flow_internal(source.each)
     end
 
-    def flow_internal(source)
+    def flow_internal(source, send_eof = true)
       result = begin
                  response = @next_piece.receive(source.next)
                  if (response.result?) then
                    response
                  else #it's another piece
-                   Inlet.new(response, @done_or_not).flow_internal(source)
+                   Inlet.new(response, @done_or_not).flow_internal(source, send_eof)
                  end
                rescue StopIteration
-                 if (@done_or_not == :done) then
+                 if (@done_or_not == :done && send_eof) then
                    @next_piece.eof
                  else
                    @next_piece

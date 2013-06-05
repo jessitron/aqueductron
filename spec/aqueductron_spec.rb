@@ -113,4 +113,9 @@ module Aqueductron
       end
     end
   end
+  describe 'partial flows' do
+    it 'can accept input in two parts' do
+      Duct.new.array.keep_flowing([1,2]).flow([3]).value.should == [1,2,3]
+    end
+  end
 end

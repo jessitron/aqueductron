@@ -4,7 +4,7 @@ require_relative '../lib/aqueductron.rb'
 # how to say 'all draw methods at all times have the property that the
 # string element in each array is the same length' ?
 module Aqueductron
-  draw_array = ->(a) { a.join("\n") + "\n"}
+  draw_array = ->(a) { a.map { |r| r.rstrip }.join("\n") + "\n"}
   describe 'The drawing of the pipe' do
     describe 'An ordinary piece' do
       it 'should print the default description' do
@@ -53,6 +53,7 @@ eos
   end
 
   describe 'drawing a joint piece' do
+    # TODO: keys of different lengths
     it 'has three times as many elements as paths: 1' do
        JointPiece.new({ :this => Duct.new.count}).draw.size.should == 3
     end
@@ -79,6 +80,18 @@ eos
       end
     end
   end
+
+  describe 'the partition piece can draw itself' do
+    subject {SpontaneousJointPiece.new({}, ->(a) {a}, ->(a) { Duct.new.count}) }
+    #TODO: inspect
+    it ('can draw an empty partition list') do
+      draw_array.call(subject.draw).should == <<eos
+ /
+<  +?
+ \\
+eos
+    end
+  end
   describe 'horizontal concatenation' do
     it ('can handle the trivial case of just one') do
       Drawing.horizontal_concat(["blah"],[">"]).should == ["blah>"]
@@ -103,5 +116,7 @@ eos
       Drawing.horizontal_concat(["1"],["a","b","c","d"]).should == [" a","1b"," c"," d"]
 
     end
+    # TODO: exception if lengths aren't the same on the first
+    # TODO: shorten method name
   end
 end

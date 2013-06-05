@@ -35,6 +35,10 @@ module Aqueductron
       construct_compound_result(new_map)
     end
 
+    def draw
+      Drawing.horizontal_concat(Drawing.joint_prefix, ["+?"])
+    end
+
     private
     def construct_compound_result(paths)
       CompoundResult.new(paths)
