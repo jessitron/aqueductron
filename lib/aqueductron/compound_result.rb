@@ -1,6 +1,11 @@
 module Aqueductron
+  #
+  # this Result holds multiple results in
+  # a dictionary sort of structure.
   class CompoundResult
     include Result
+    #
+    # paths: a hash of keys (symbols) to more results
     def initialize(paths)
       @contents = paths
     end
@@ -9,6 +14,10 @@ module Aqueductron
       @contents.keys
     end
 
+    #
+    # traverse a symbol path to get the result at the end
+    # of the duct described by that path
+    # path: array of symbols that describe a route down the duct
     def value(*path)
       return self if path.empty?
       (head, *tail) = path

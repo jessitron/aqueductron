@@ -1,12 +1,15 @@
 require_relative 'result'
 
 module Aqueductron
+  #
+  # A Result that holds one value
   class SimpleResult
     include Result
     def initialize(value)
       @value = value
     end
 
+    # no further traversal
     def keys
       []
     end

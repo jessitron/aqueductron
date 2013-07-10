@@ -9,6 +9,8 @@ require_relative 'array_end_piece'
 
 module Aqueductron
   module Buildering
+    #
+    # summarize all results that come down this pipe into a single value
     def answer(monoid)
       answer_int(EndPiece.new(monoid))
     end
@@ -17,6 +19,13 @@ module Aqueductron
       answer_int(CountingEndPiece.new)
     end
 
+    #
+    # I could totally do this as a map to a single-item array,
+    # followed by an answer with the List monoid.
+    #
+    # But while I'm thinking about that, why use Monoids when I could
+    # do a more general reduction into any summary type. monoid are a
+    # special case of reducers.
     def array
       answer_int(ArrayEndPiece.new)
     end
