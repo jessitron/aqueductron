@@ -7,9 +7,11 @@ module Aqueductron
     def initialize(so_far = 0)
       @so_far = so_far
     end
-    def eof
+
+    def finish
       SimpleResult.new(@so_far)
     end
+
     def receive msg
       CountingEndPiece.new(@so_far + 1)
     end
@@ -18,6 +20,5 @@ module Aqueductron
       desc = (@so_far > 0) ? "# (#{@so_far})" : "#"
       Drawing.draw_end_piece(desc)
     end
-
   end
 end

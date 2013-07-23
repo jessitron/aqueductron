@@ -10,7 +10,7 @@ module Aqueductron
       @so_far = (so_far == :no_value) ? monoid.zero : so_far
     end
 
-    def eof
+    def finish
       SimpleResult.new(@so_far)
     end
 

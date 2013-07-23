@@ -29,8 +29,8 @@ module Aqueductron
       end
     end
 
-    def eof
-      go = ->(v) { v.result? ? v : v.eof }
+    def finish
+      go = ->(v) { v.result? ? v : v.finish }
       new_map = paths.map_values(&go)
       construct_compound_result(new_map)
     end

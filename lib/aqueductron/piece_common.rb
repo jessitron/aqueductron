@@ -5,7 +5,7 @@ module Aqueductron
     # Always returns a Result
     # source: an Enumerable of messages
     def flow(source)
-      Inlet.flow(self, source.each).eof
+      Inlet.flow(self, source.each).finish
     end
 
     #

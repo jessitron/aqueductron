@@ -9,7 +9,7 @@ module Aqueductron
       @most_recent = most_recent
     end
 
-    def eof
+    def finish
       SimpleResult.new(@most_recent)
     end
 

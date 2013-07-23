@@ -38,7 +38,7 @@ module Aqueductron
     # when there are no more messages, and it's time to
     # take what we have and scrape together a Result.
     # Always returns a Result.
-    def eof
+    def finish
       send_eof
     end
 
@@ -60,7 +60,7 @@ module Aqueductron
       end
     end
     def send_eof
-      @destination.eof
+      @destination.finish
     end
   end
 end

@@ -8,7 +8,7 @@ module Aqueductron
       "Result:\n" + draw.join("\n")
     end
     # act like a piece that does nothing new
-    def eof
+    def finish
       self
     end
     # act like a piece that does nothing new
