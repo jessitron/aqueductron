@@ -60,7 +60,7 @@ module Fibonacci
         this_k = estimate_k(prev_prev_number, prev_number, msg)
         average_k = add_data_point(k, data_points_in_k, this_k)
         piece.pass_on(msg, learning_fib_function(msg, prev_number, average_k, data_points_in_k + 1),
-                    "..#{prev_number},#{msg}.. learning k~#{k}")
+                    "..#{prev_number},#{msg}.. learning k~#{average_k}")
       end
     end
   end
