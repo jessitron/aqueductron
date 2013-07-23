@@ -17,6 +17,14 @@ module Aqueductron
 
         result.keys.should == [3,5] #this test doesn't really belong here
       end
+
+      it 'does not modify the original pipe' do
+        orig = Duct.new.partition(->(a) {a},->(a) { Duct.new.count})
+
+        orig.drip('A').eof.value('A').should == 1
+        # deliberate duplication of line
+        orig.drip('A').eof.value('A').should == 1
+      end
     end
   end
 end
