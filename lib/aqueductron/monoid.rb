@@ -36,6 +36,7 @@ module Aqueductron
     def self.concat
       Monoid.new("", ->(a,b) {a + b})
     end
+
     # integer summation monoid
     def self.plus
       Monoid.new(0,  ->(a,b) {a + b})

@@ -18,16 +18,16 @@ module Aqueductron
     def self.horizontal_concat(first, second)
       # I <3 Ruby. this kind of recursive ref doesn't work in Scala
       identity = ->(piece,msg) { piece.pass_on(msg, identity)}
-      concat_one_of_these= ->(array) {
-        ->(piece,msg) {
+      concat_one_of_these= ->(array) do
+        ->(piece,msg) do
            (head, *tail) = array
            if (tail.empty?)
              piece.pass_on(msg + head, identity)
            else
              piece.pass_on(msg + head, concat_one_of_these.call(tail))
            end
-        }
-      }
+        end
+      end
       centeredSecond = centered_on(first.length, second)
       centered_first = centered_on(second.length, first, padding(first), padding(first))
       duct = Duct.new.custom(concat_one_of_these.call(centeredSecond)).array()

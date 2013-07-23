@@ -31,6 +31,7 @@ module Aqueductron
       ducts = Drawing.draw_multiple_paths(@paths)
       Drawing.horizontal_concat(prefix, ducts)
     end
+
     private
     def construct_compound_result(paths)
       CompoundResult.new(paths)

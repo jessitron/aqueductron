@@ -13,7 +13,7 @@ module Aqueductron
       SimpleResult.new(@so_far)
     end
 
-    def receive msg
+    def receive(msg)
       ArrayEndPiece.new(@so_far + [msg])
     end
 
