@@ -17,8 +17,9 @@ module Aqueductron
       new_map = if (paths.key? category)
         paths
       else
-        paths[category] = make_new_path.call(category) # todo: don't update
-        paths
+        new_paths = paths.dup
+        new_paths[category] = make_new_path.call(category)
+        new_paths
       end
       go = ->(v) { v.result? ? v : v.receive(msg) }
       new_map[category] = go.call(new_map[category]) #todo: don't mutate
