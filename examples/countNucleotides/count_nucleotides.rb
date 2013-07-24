@@ -1,65 +1,74 @@
+
+#
+# The objective is to count the nucleotides (A,C,T,G) in a string.
+#
+# ## Simplest solution
+# We could construct the pipe ahead of time, with four branches.
 require 'aqueductron'
 
+# - Start a new pipe
+cn = Duct.new.
+# - turn any string passed in into a sequence of chars; each char
+# gets passed down individually.
+              expand(->(s) {s.each_char}).
+# - translate each char into uppercase
+              through(->(c) {c.upcase}).
+# - split the duct into four pipes. Each filters out only the letter it cares about, and counts them.
+              split( {
+                 :A => Duct.new.keeping(->(actg) { actg == "A"}).count,
+                 :T => Duct.new.keeping(->(actg) { actg == "T"}).count,
+                 :C => Duct.new.keeping(->(actg) { actg == "C"}).count,
+                 :G => Duct.new.keeping(->(actg) { actg == "A"}).count })
+
+# Now we have a static pipe. To use it, we
+# - send in one string
+resultingCounts = cn.drip("ACCTAACG").
+# - tell it we're done
+                     eof
+
+# - get the results
+# => 3
+resultingCounts.value(:A)
+# => 3
+resultingCounts.value(:C)
+# => 1
+resultingCounts.value(:T)
+# => 3
+resultingCounts.value(:G)
+
+## More General Case
+# what if we get some other letter? You're bound to see an N (for no data) in
+# any real sequence string.
 #
-# The simple implementation is a duct that splits up these nucleotides
-#
-# cn = Duct.new.
-#               expand(->(s) {s.each_char}).
-#               through(->(c) {c.upcase}).
-#               split( {
-#                  :A => Duct.new.keeping(->(actg) { actg == "A"}).count,
-#                  :T => Duct.new.keeping(->(actg) { actg == "T"}).count,
-#                  :C => Duct.new.keeping(->(actg) { actg == "C"}).count,
-#                  :G => Duct.new.keeping(->(actg) { actg == "A"}).count })
-#
-# The more interesting implementation (detailed further below) counts
+# The more interesting implementation counts
 # whatever the heck it gets.
 #
-# countChars = Duct.new.
-#               expand(->(s) {s.each_char}).
-#               through(->(c) {c.upcase}).
-#               partition(->(a) {a}, ->(a) { Duct.new.count })
-#
+puts "This part is more interesting"
 
+# - start the duct
+countChars = Duct.new.
+# - expand strings into characters, as before
+              expand(->(s) {s.each_char}).
+# - dynamically divide the data according to a categorization function,
+# in this case: uppercase version of the character
+              partition(->(a) {a.upcase},
+# - for each unique category, a new duct will be created using this function.
+                        ->(a) { Duct.new.count })
 
-class CountNucleotides
-  def initialize
-# create a piece of a duct that counts what goes in
-#   --\
-#***   count
-#   --/
-    count_letter = ->(unused) { Aqueductron::Duct.new.count }
-    identity = ->(e) { e }
-
-# a dynamically-splitting pipeline that categorizes
-#                 < ***
-# ---            /
-# >   identity <  - < ***
-# ---            \
-#                 < ***
-    @duct = Aqueductron::Duct.new.partition(identity, count_letter)
-
-  end
-
-  def count(sequence)
-    # send the letters through.
-    result = @duct.flow(sequence.chars)
-    result_to_hash(result)
-  end
-
-  # for demonstration purposes
-  def for_example
-    input = "GACCACTGGTCA"
-    puts "input is #{input}"
-    result = @duct.flow(input.chars)
-    bases = result.keys
-    puts bases.join(" ")
-    puts bases.map { |atgc| result.value(atgc)}.join(" ")
-  end
-
-  private
-    def result_to_hash(result)
-      keys_to_values = result.keys.map { |k| [k, result.value(k)]}
-      Hash[*keys_to_values.flatten]
-    end
-end
+# Now, we can pass in strings of whatever, and it'll count what it sees.
+countChars.drip("AACTGTNNA").eof
+#     ---
+#      A => 3
+#     ---
+#     ---
+#      C => 1
+#     ---
+#     ---
+#      T => 2
+#     ---
+#     ---
+#      G => 1
+#     ---
+#     ---
+#      N => 2
+#     ---
