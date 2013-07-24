@@ -1,47 +1,49 @@
+## Example: Fibonacci Rabbits
+# based on the problem statement at http://rosalind.info/problems/fib/
+#
 require 'aqueductron'
 
-# It is much more interesting to have the population estimate
-# based on observed populations.
-# This solution calculates a value for k based on the first 3 or
-# more generations. More than 3 generations of data leads to a
-# refined (averaged) value of k.
-module Fibonacci
-  # generate an infinite stream of input
-  def look_at_this(rabbits_by_month)
-    StuffAndThen.new(rabbits_by_month).lazy
-  end
-
-  def rabbits(input, n)
-    #start with an empty_fib_function, but that will change
-    duct = rabbit_predictor
-    duct.flow(look_at_this(input).take(n)).value
-  end
-
+# The rabbits, see, they reproduce. Generation n is a function of the
+# size of the previous two generations.
+#
+#    F(n) = F(n - 1) + k * F(n - 2)
+#
+# The game is to predict future generation sizes.
+# Send the known generation sizes down the duct, and it learns
+# a value of k. It needs at least 3 generations.
+# Send :unknown and the size of the next generation is predicted.
+#
+### Custom ductwork
+# Custom duct pieces contain functions that construct the next
+# duct piece out of other functions. Each function knows a little
+# more than the one in the previous iteration.
+class Fibonacci
+  # The duct is short: one custom piece, and then a collector that
+  # outputs the last number it has seen. That is the last known value
+  # in the sequence of rabbit counts.
+  # The interesting parts are the custom function definitions.
   def rabbit_predictor
     Aqueductron::Duct.new.custom(empty_fib_function).last
-    # for fun in irb:
-    # include Fibonacci
-    # rabbits = Duct.new.custom(empty_fib_function).split( {
-    #           :last => Duct.new.last,
-    #           :all  => Duct.new.array })
   end
 
-  private
-  # start here: we know nothing
+# First, we know nothing. The initial piece only knows how to accept
+# some data and change the piece to incorporate that data.
   def empty_fib_function
     ->(piece,msg) do
       piece.pass_on(msg, one_data_fib_function(msg),"#{msg}..")
     end
   end
 
-  # then we know exactly one thing
+# Second, we know one generation's size. That isn't enough to do anything
+# except look for the second generation.
   def one_data_fib_function(first)
     ->(piece,msg) do
       piece.pass_on(msg, two_data_fib_function(first, msg),"#{first},#{msg}..")
     end
   end
 
-  # then we know exactly two things
+# Third, we know two generations. Once we get an additional piece of data,
+# we can calculate an initial guess at k.
   def two_data_fib_function(first,second)
     ->(piece,msg) do
       k = (msg - second + 0.0) / first # initial guess at k
@@ -50,8 +52,11 @@ module Fibonacci
     end
   end
 
-  # now, as long as we keep getting data, we can refine the value of k
-  # once we get :unknown, we begin predicting
+  # Fourth, as long as we keep getting data, we can refine the value of k.
+  # Keep using this function, with different arguments, as long as we keep
+  # getting observed data points. As long as someone is still counting
+  # the rabbits.
+  # Once we get :unknown, it's time to start predicting.
   def learning_fib_function(prev_number, prev_prev_number, k, data_points_in_k)
     ->(piece,msg) do
       if (msg == :unknown)
@@ -65,8 +70,9 @@ module Fibonacci
     end
   end
 
-  # once we're predicting, we continue predicting. This one keeps
-  # returning a new version of itself
+  # Fifth and finally, predict future generations based on the value
+  # of k we've learned. This one keeps setting up a new version of
+  # itself, with different arguments, every time.
   def fib_function(prev_number, prev_prev_number, k)
     ->(piece, _) do # msg is ignored
       current_val = (prev_number + ( prev_prev_number * k )).round
@@ -75,7 +81,7 @@ module Fibonacci
     end
   end
 
-  # helpers
+  # helper methods do some calculation
   def estimate_k(first, second, third) #consecutive terms
     (third - second) / first
   end
@@ -83,23 +89,22 @@ module Fibonacci
   def add_data_point(average_so_far, data_points_included, new_data_point)
     (average_so_far * data_points_included + new_data_point) / (data_points_included + 1)
   end
-
-  # an Enumeration of everything we know, followed by an
-  # infinite stream of :unknown
-  class StuffAndThen
-    def initialize(stuff)
-      @stuff = stuff
-    end
-    include Enumerable
-    def each
-      @stuff.each do |x|
-        yield x
-      end
-      while true do
-        yield :unknown
-      end
-    end
-  end
-
-
 end
+
+### To use this
+# get a new prediction duct
+rabbits = Fibonacci.new.rabbit_predictor
+# Seed it with the known data
+seeded = rabbits.keep_flowing([2,5,8,11])
+# send :unknown to get the next output
+#
+#    => 17
+#
+seeded.drip(:unknown).eof
+# and more :unknowns to get subsequent generations
+#
+#    => 25
+#
+seeded.drip(:unknown).drip(:unknown)
+
+# for added fun, drip the known generations in one at a time to watch the duct learn.
