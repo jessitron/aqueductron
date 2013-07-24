@@ -11,7 +11,7 @@ module Aqueductron
         make_a_pipeline = ->(e) { Duct.new().answer(Monoid.concat)}
         categorize = ->(e) { e.length }
 
-        result = Duct.new().partition(categorize, make_a_pipeline).flow(input).value
+        result = Duct.new().partition(categorize, make_a_pipeline).flow(input).finish.value
         result.value(3).should == "onetwo"
         result.value(5).should == "three"
 
@@ -21,9 +21,9 @@ module Aqueductron
       it 'does not modify the original pipe' do
         orig = Duct.new.partition(->(a) {a},->(a) { Duct.new.count})
 
-        orig.drip('A').eof.value('A').should == 1
+        orig.drip('A').finish.value('A').should == 1
         # deliberate duplication of line
-        orig.drip('A').eof.value('A').should == 1
+        orig.drip('A').finish.value('A').should == 1
       end
     end
   end

@@ -38,7 +38,6 @@ class CountNucleotides
 # ---            \
 #                 < ***
     @duct = Aqueductron::Duct.new.partition(identity, count_letter)
-
   end
 
   def count(sequence)

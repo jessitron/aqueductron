@@ -7,7 +7,7 @@ module Aqueductron
       let(:new_builder) { Duct.new() }
       let(:builder) { new_builder }
 
-      subject { builder.answer(Monoid.concat).flow(input).value }
+      subject { builder.answer(Monoid.concat).flow(input).finish.value }
 
       describe 'giving an answer' do
         let(:input) { ["hello"] }
@@ -40,7 +40,7 @@ module Aqueductron
       let(:new_builder) { Duct.new() }
       let(:builder) { new_builder }
 
-      subject { builder.flow(input).value }
+      subject { builder.flow(input).finish.value }
 
       describe 'adding' do
         let(:builder) { new_builder.answer(Monoid.plus) }
@@ -71,7 +71,7 @@ module Aqueductron
           expand(array_of_chars).
           keeping(is_vowel).
           answer(Monoid.concat)
-        result.flow(input).value.should == "oeo"
+        result.flow(input).finish.value.should == "oeo"
       end
 
       #         /---------------------\
@@ -92,7 +92,7 @@ module Aqueductron
                       concatenated_again: Duct.new.answer(Monoid.concat)
                      )
                )
-               output = result.flow(input)
+               output = result.flow(input).finish
                output.value(:all_concatenated).should == "onetwo"
                output.value(:all,:only_first).should == "one"
                output.value(:all,:concatenated_again).should == "onetwo"
@@ -108,6 +108,9 @@ module Aqueductron
                 consonants: Duct.new.keeping(notnot.(is_vowel)).count
         })
         output = result.flow(["one","two", "three"])
+        output.result?.should be_false
+        output = output.finish
+
         output.value(:vowels).should == 5
         output.value(:consonants).should == 6
       end
@@ -115,7 +118,7 @@ module Aqueductron
   end
   describe 'partial flows' do
     it 'can accept input in two parts' do
-      Duct.new.array.keep_flowing([1,2]).flow([3]).value.should == [1,2,3]
+      Duct.new.array.flow([1,2]).flow([3]).finish.value.should == [1,2,3]
     end
   end
 end

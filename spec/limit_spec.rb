@@ -7,7 +7,7 @@ module Aqueductron
       let(:new_builder) { Duct.new() }
       let(:builder) { new_builder }
 
-      subject { builder.last.flow(input).value }
+      subject { builder.last.flow(input).finish.value }
 
       describe 'giving an answer' do
         it { should == input.last }
@@ -25,7 +25,7 @@ module Aqueductron
       let(:how_many) { 2 }
       let(:builder) { new_builder }
 
-      subject { builder.take(how_many).last.flow(input).value }
+      subject { builder.take(how_many).last.flow(input).finish.value }
 
       describe 'giving an answer' do
         it { should == 'two' }

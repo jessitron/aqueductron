@@ -21,7 +21,7 @@ fib = ->(n, k=1) do
   if n == 1 then
     1
   else
-    Aqueductron::Duct.new.custom(fib_function.call(1, 0, k)).take(n-1).last.flow(integers.call).value
+    Aqueductron::Duct.new.custom(fib_function.call(1, 0, k)).take(n-1).last.flow(integers.call).finish.value
   end
 end
 

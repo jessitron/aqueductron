@@ -26,7 +26,7 @@ duct = Aqueductron::Duct.new.
       )
   )
 
-result = duct.flow(ARGV)
+result = duct.flow(ARGV).finish
 
 totalPrice = result.value(:valid, :total)
 validCount = result.value(:valid, :count)

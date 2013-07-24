@@ -14,7 +14,7 @@ module Fibonacci
   def rabbits(input, n)
     #start with an empty_fib_function, but that will change
     duct = rabbit_predictor
-    duct.flow(look_at_this(input).take(n)).value
+    duct.flow(look_at_this(input).take(n)).finish.value
   end
 
   def rabbit_predictor

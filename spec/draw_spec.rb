@@ -54,7 +54,7 @@ eos
 eos
     end
     it 'displays most recent for last, after one has gone' do
-      draw_array.call(LastEndPiece.new.keep_flowing(["boo"]).draw).should == <<eos
+      draw_array.call(LastEndPiece.new.flow(["boo"]).draw).should == <<eos
 \\
  last (boo)
 /
@@ -119,7 +119,7 @@ eos
 eos
     end
     it ('can draw a not-empty partition list') do
-      draw_array.call(subject.keep_flowing(["A"]).draw).should == <<eos
+      draw_array.call(subject.flow(["A"]).draw).should == <<eos
  / ---\\
 <   A  # (1)
  \\ ---/
@@ -156,7 +156,7 @@ eos
 
   describe 'the array end piece' do
     it 'prints its output so far' do
-      draw_array.call(Duct.new.array.keep_flowing([1,2]).draw).should == <<eos
+      draw_array.call(Duct.new.array.flow([1,2]).draw).should == <<eos
 \\
  [] ([1, 2])
 /

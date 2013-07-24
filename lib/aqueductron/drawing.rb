@@ -31,7 +31,7 @@ module Aqueductron
       centeredSecond = centered_on(first.length, second)
       centered_first = centered_on(second.length, first, padding(first), padding(first))
       duct = Duct.new.custom(concat_one_of_these.call(centeredSecond)).array()
-      duct.flow(centered_first).value
+      duct.flow(centered_first).finish.value
     end
 
     private
