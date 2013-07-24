@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Example: Fibonacci Rabbits</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>Example: Fibonacci Rabbits</h1>
+<p>based on the problem statement at <a href="http://rosalind.info/problems/fib/">http://rosalind.info/problems/fib/</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">require</span> <span class="string">'aqueductron'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The rabbits, see, they reproduce. Generation n is a function of the
+size of the previous two generations.</p>
+<p>   F(n) = F(n - 1) + k * F(n - 2)</p>
+<p>The game is to predict future generation sizes.
+Send the known generation sizes down the duct, and it learns
+a value of k. It needs at least 3 generations.
+Send :unknown and the size of the next generation is predicted.</p>
+<h2>Custom ductwork</h2>
+<p>Custom duct pieces contain functions that construct the next
+duct piece out of other functions. Each function knows a little
+more than the one in the previous iteration.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Fibonacci</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>The duct is short: one custom piece, and then a collector that
+outputs the last number it has seen. That is the last known value
+in the sequence of rabbit counts.
+The interesting parts are the custom function definitions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">rabbit_predictor</span></span>
+    <span class="constant">Aqueductron::Duct</span>.new.custom(empty_fib_function).last
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>First, we know nothing. The initial piece only knows how to accept
+some data and change the piece to incorporate that data.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">empty_fib_function</span></span>
+    -&gt;(piece,msg) <span class="keyword">do</span>
+      piece.pass_on(msg, one_data_fib_function(msg),<span class="string">"<span class="subst">#{msg}</span>.."</span>)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Second, we know one generation&#39;s size. That isn&#39;t enough to do anything
+except look for the second generation.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">one_data_fib_function</span><span class="params">(first)</span></span>
+    -&gt;(piece,msg) <span class="keyword">do</span>
+      piece.pass_on(msg, two_data_fib_function(first, msg),<span class="string">"<span class="subst">#{first}</span>,<span class="subst">#{msg}</span>.."</span>)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Third, we know two generations. Once we get an additional piece of data,
+we can calculate an initial guess at k.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">two_data_fib_function</span><span class="params">(first,second)</span></span>
+    -&gt;(piece,msg) <span class="keyword">do</span>
+      k = (msg - second + <span class="number">0</span>.<span class="number">0</span>) / first <span class="comment"># initial guess at k</span>
+      piece.pass_on(msg, learning_fib_function(msg, second, k, <span class="number">1</span>),
+                    <span class="string">"..<span class="subst">#{second}</span>,<span class="subst">#{msg}</span>.. starting k~<span class="subst">#{k}</span>"</span>)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Fourth, as long as we keep getting data, we can refine the value of k.
+Keep using this function, with different arguments, as long as we keep
+getting observed data points. As long as someone is still counting
+the rabbits.
+Once we get :unknown, it&#39;s time to start predicting.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">learning_fib_function</span><span class="params">(prev_number, prev_prev_number, k, data_points_in_k)</span></span>
+    -&gt;(piece,msg) <span class="keyword">do</span>
+      <span class="keyword">if</span> (msg == <span class="symbol">:unknown</span>)
+        fib_function(prev_number, prev_prev_number, k).call(piece,msg)
+      <span class="keyword">else</span>
+        this_k = estimate_k(prev_prev_number, prev_number, msg)
+        average_k = add_data_point(k, data_points_in_k, this_k)
+        piece.pass_on(msg, learning_fib_function(msg, prev_number, average_k, data_points_in_k + <span class="number">1</span>),
+                    <span class="string">"..<span class="subst">#{prev_number}</span>,<span class="subst">#{msg}</span>.. learning k~<span class="subst">#{average_k}</span>"</span>)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Fifth and finally, predict future generations based on the value
+of k we&#39;ve learned. This one keeps setting up a new version of
+itself, with different arguments, every time.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">fib_function</span><span class="params">(prev_number, prev_prev_number, k)</span></span>
+    -&gt;(piece, <span class="number">_</span>) <span class="keyword">do</span> <span class="comment"># msg is ignored</span>
+      current_val = (prev_number + ( prev_prev_number * k )).round
+      piece.pass_on(current_val, fib_function(current_val, prev_number, k),
+                   <span class="string">"..<span class="subst">#{prev_number}</span>,<span class="subst">#{current_val}</span>.. k=<span class="subst">#{k}</span>"</span>)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>helper methods do some calculation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">def</span> <span class="title">estimate_k</span><span class="params">(first, second, third)</span> </span><span class="comment">#consecutive terms</span>
+    (third - second) / first
+  <span class="keyword">end</span>
+
+  <span class="function"><span class="keyword">def</span> <span class="title">add_data_point</span><span class="params">(average_so_far, data_points_included, new_data_point)</span></span>
+    (average_so_far * data_points_included + new_data_point) / (data_points_included + <span class="number">1</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>To use this</h2>
+<p>get a new prediction duct</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>rabbits = <span class="constant">Fibonacci</span>.new.rabbit_predictor</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Seed it with the known data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>seeded = rabbits.keep_flowing([<span class="number">2</span>,<span class="number">5</span>,<span class="number">8</span>,<span class="number">11</span>])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>send :unknown to get the next output</p>
+<p>   =&gt; 17</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>seeded.drip(<span class="symbol">:unknown</span>).eof</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>and more :unknowns to get subsequent generations</p>
+<p>   =&gt; 25</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>seeded.drip(<span class="symbol">:unknown</span>).drip(<span class="symbol">:unknown</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>for added fun, drip the known generations in one at a time to watch the duct learn.</p>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
