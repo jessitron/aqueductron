@@ -76,7 +76,7 @@ module Aqueductron
 
     def expand_function(expansion)
       ->(piece, msg) do
-        next_piece = Inlet.flow(piece.destination, expansion.call(msg)).finish
+        next_piece = Inlet.flow(piece.destination, expansion.call(msg))
         Piece.new(next_piece, expand_function(expansion))
       end
     end
