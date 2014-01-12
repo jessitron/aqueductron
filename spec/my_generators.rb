@@ -27,9 +27,7 @@ end
 # Mario: is there some way to include the generator module
 # in my TEST?
 #
-describe Generators do
-  subject = GeneratingThing.new
-
+describe GeneratingThing do
   describe ("characters") do
     generative ("only gives me letters") do
       data(:sample) { subject.alpha_char }
@@ -73,7 +71,7 @@ describe Generators do
     #todo: easy way to get method, with args passed in, as function. Or with args as functions
     generative("builds arrays of letters") do
       data(:length) { subject.small_int }
-      fill = subject.method :alpha_char
+      let(:fill) { subject.method :alpha_char }
       let(:sample) { subject.array_of(fill, length)}
 
       it("has the right length") do
