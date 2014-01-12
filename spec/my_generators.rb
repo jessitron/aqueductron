@@ -14,9 +14,9 @@ module Generators
     intAmong(0, to)
   end
 
-  # todo: default length to random small int
-  def arrayOf(fill_function, length)
-    (1..length).map{ fill_function.call }
+  def arrayOf(fill_function, length = :youPick)
+    l = if (length == :youPick) then smallInt else length end
+    (1..l).map{ fill_function.call }
   end
 
 end
@@ -87,6 +87,13 @@ describe Generators do
       end
     end
 
+    generative("produces an array of small int length by default") do
+      data(:sample) { subject.arrayOf (subject.method :alphaChar )}
+      it("is between 0 and 10 long") do
+        (sample.length >= 0).should == true
+        (sample.length <= 10).should == true
+      end
+    end
   end
 
 end
