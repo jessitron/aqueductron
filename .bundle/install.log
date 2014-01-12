@@ -1,0 +1,17 @@
+# Logfile created on 2014-01-11 21:23:52 -0600 by logger.rb/31641
+I, [2014-01-11T21:23:52.475069 #19489]  INFO -- : 0:  aqueductron (0.0.2) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/aqueductron-0.0.2.gemspec
+I, [2014-01-11T21:23:54.444569 #19489]  INFO -- : 0:  diff-lcs (1.2.5) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/diff-lcs-1.2.5.gemspec
+I, [2014-01-11T21:23:56.351593 #19489]  INFO -- : 0:  rspec-core (2.14.7) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-core-2.14.7.gemspec
+I, [2014-01-11T21:23:57.645648 #19489]  INFO -- : 0:  rspec-expectations (2.14.4) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-expectations-2.14.4.gemspec
+I, [2014-01-11T21:23:59.278238 #19489]  INFO -- : 0:  rspec-mocks (2.14.4) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-mocks-2.14.4.gemspec
+I, [2014-01-11T21:23:59.391096 #19489]  INFO -- : 0:  rspec (2.14.1) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-2.14.1.gemspec
+I, [2014-01-11T21:24:00.706424 #19489]  INFO -- : 0:  generative (0.1.0) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/generative-0.1.0.gemspec
+I, [2014-01-11T21:24:00.707081 #19489]  INFO -- : 0:  bundler (1.5.1) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/bundler-1.5.1.gemspec
+I, [2014-01-11T21:36:40.920561 #20095]  INFO -- : 0:  aqueductron (0.0.2) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/aqueductron-0.0.2.gemspec
+I, [2014-01-11T21:36:40.921154 #20095]  INFO -- : 0:  diff-lcs (1.2.5) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/diff-lcs-1.2.5.gemspec
+I, [2014-01-11T21:36:40.921645 #20095]  INFO -- : 0:  rspec-core (2.14.7) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-core-2.14.7.gemspec
+I, [2014-01-11T21:36:40.922129 #20095]  INFO -- : 0:  rspec-expectations (2.14.4) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-expectations-2.14.4.gemspec
+I, [2014-01-11T21:36:40.922627 #20095]  INFO -- : 0:  rspec-mocks (2.14.4) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-mocks-2.14.4.gemspec
+I, [2014-01-11T21:36:40.923130 #20095]  INFO -- : 0:  rspec (2.14.1) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/rspec-2.14.1.gemspec
+I, [2014-01-11T21:36:40.923606 #20095]  INFO -- : 0:  generative (0.1.0) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/generative-0.1.0.gemspec
+I, [2014-01-11T21:36:40.924048 #20095]  INFO -- : 0:  bundler (1.5.1) from /usr/local/rvm/gems/ruby-1.9.3-p194/specifications/bundler-1.5.1.gemspec
