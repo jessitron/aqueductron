@@ -15,7 +15,7 @@ module Aqueductron
     end
 
     generative ("works for random arrays") do
-      data(:input) { gen.arrayOf(gen.method :smallInt) }
+      data(:input) { gen.array_of(gen.method :small_int) }
 
       it("spits the input back out") do
         subject.flow(input).value.should == input

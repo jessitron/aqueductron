@@ -1,24 +1,22 @@
 require 'generative'
 
 module Generators
-  def alphaChar
-    allTheLetters = ('a'..'z').to_a + ('A'..'Z').to_a
-    allTheLetters.sample
+  def alpha_char
+    all_the_letters = ('a'..'z').to_a + ('A'..'Z').to_a
+    all_the_letters.sample
   end
 
-  def intAmong(from, to)
+  def int_among(from, to)
     rand(from..to)
   end
 
-  def smallInt(to = 10)
-    intAmong(0, to)
+  def small_int(to = 10)
+    int_among(0, to)
   end
 
-  def arrayOf(fill_function, length = :youPick)
-    l = if (length == :youPick) then smallInt else length end
-    (1..l).map{ fill_function.call }
+  def array_of(fill_function, length = small_int)
+    (1..length).map{ fill_function.call }
   end
-
 end
 
 class GeneratingThing
@@ -34,7 +32,7 @@ describe Generators do
 
   describe ("characters") do
     generative ("only gives me letters") do
-      data(:sample) { subject.alphaChar }
+      data(:sample) { subject.alpha_char }
 
       it("is a letter") do
         (sample =~ /[[:alpha:]]/).should == 0
@@ -49,7 +47,7 @@ describe Generators do
 
       it("returns something in the range") do
         if (one <= two)
-          sample = subject.intAmong(one, two)
+          sample = subject.int_among(one, two)
           (sample >= one).should == true
           (sample <= two).should == true
         end
@@ -57,15 +55,15 @@ describe Generators do
     end
     generative("small integers") do
       # how can I test that it isn't always returning 3?
-      data(:sample) { subject.smallInt }
+      data(:sample) { subject.small_int }
       it("is between 0 and 10 by default") do
         (sample >= 0).should == true
         (sample <= 10).should == true
       end
       it("never exceeds the bound, if passed in") do
-        newSample = subject.smallInt(sample)
-        (newSample >= 0).should == true
-        (newSample <= sample).should == true
+        new_sample = subject.small_int(sample)
+        (new_sample >= 0).should == true
+        (new_sample <= sample).should == true
       end
     end
   end
@@ -74,9 +72,9 @@ describe Generators do
     #todo: put in oneOf method
     #todo: easy way to get method, with args passed in, as function. Or with args as functions
     generative("builds arrays of letters") do
-      data(:length) { subject.smallInt }
-      fill = subject.method :alphaChar
-      let(:sample) { subject.arrayOf(fill, length)}
+      data(:length) { subject.small_int }
+      fill = subject.method :alpha_char
+      let(:sample) { subject.array_of(fill, length)}
 
       it("has the right length") do
         sample.length.should == length
@@ -88,12 +86,11 @@ describe Generators do
     end
 
     generative("produces an array of small int length by default") do
-      data(:sample) { subject.arrayOf (subject.method :alphaChar )}
+      data(:sample) { subject.array_of (subject.method :alpha_char )}
       it("is between 0 and 10 long") do
         (sample.length >= 0).should == true
         (sample.length <= 10).should == true
       end
     end
   end
-
 end
