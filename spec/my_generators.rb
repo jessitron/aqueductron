@@ -13,6 +13,12 @@ module Generators
   def smallInt(to = 10)
     intAmong(0, to)
   end
+
+  # todo: default length to random small int
+  def arrayOf(fill_function, length)
+    (1..length).map{ fill_function.call }
+  end
+
 end
 
 class GeneratingThing
@@ -65,6 +71,21 @@ describe Generators do
   end
 
   describe("arrays of something else") do
+    #todo: put in oneOf method
+    #todo: easy way to get method, with args passed in, as function. Or with args as functions
+    generative("builds arrays of letters") do
+      data(:length) { subject.smallInt }
+      fill = subject.method :alphaChar
+      let(:sample) { subject.arrayOf(fill, length)}
+
+      it("has the right length") do
+        sample.length.should == length
+      end
+      it ("contains all characters") do
+        # is there a forall?
+        sample.map { |x| x =~ /^[[:alpha:]]$/ }.each { |b| b.should == 0}
+      end
+    end
 
   end
 
