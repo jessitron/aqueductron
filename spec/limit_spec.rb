@@ -1,4 +1,5 @@
 require_relative '../lib/aqueductron'
+require 'generative'
 
 module Aqueductron
   describe Duct do
@@ -19,7 +20,8 @@ module Aqueductron
       end
 
     end
-    describe 'it can be limited' do
+
+    describe 'it can be limited - examples' do
       let(:input) { ["one","two","three"]}
       let(:new_builder) { Duct.new() }
       let(:how_many) { 2 }
@@ -46,6 +48,24 @@ module Aqueductron
         it { should == :no_data}
       end
 
+    end
+
+    generative 'it can be limited' do
+      data(:input_len) { Generators.small_int }
+      data(:input) { Generators.array_of(Generators.method(:alpha_char), input_len)}
+      data(:how_many) { Generators.small_int }
+
+      subject { Duct.new.take(how_many).last.flow(input).value }
+
+      it 'gives the last one in the truncated output' do
+        if (how_many == 0 || input_len == 0) then
+          subject.should == :no_data
+        elsif (how_many >= input_len) then
+          subject.should == input.last
+        else
+          subject.should == input[how_many - 1]
+        end
+      end
     end
   end
 end
