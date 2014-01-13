@@ -1,33 +1,25 @@
 require 'generative'
 
 module Generators
-  def alpha_char
+  def self.alpha_char
     all_the_letters = ('a'..'z').to_a + ('A'..'Z').to_a
     all_the_letters.sample
   end
 
-  def int_among(from, to)
+  def self.int_among(from, to)
     rand(from..to)
   end
 
-  def small_int(to = 10)
+  def self.small_int(to = 10)
     int_among(0, to)
   end
 
-  def array_of(fill_function, length = small_int)
+  def self.array_of(fill_function, length = small_int)
     (1..length).map{ fill_function.call }
   end
 end
 
-class GeneratingThing
-  include Generators
-end
-
-#
-# Mario: is there some way to include the generator module
-# in my TEST?
-#
-describe GeneratingThing do
+describe Generators do
   describe ("characters") do
     generative ("only gives me letters") do
       data(:sample) { subject.alpha_char }
