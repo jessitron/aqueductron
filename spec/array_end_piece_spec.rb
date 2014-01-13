@@ -1,5 +1,4 @@
 require_relative '../lib/aqueductron.rb'
-require_relative 'my_generators'
 require 'generative'
 
 module Aqueductron

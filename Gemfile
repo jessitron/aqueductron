@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'aqueductron'
-#group :test do
+group 'test' do
    gem 'rspec'
-   gem 'generative'
-#end
+   gem 'generative', :git => 'git://github.com/jessitron/generative.git', :ref => 'generatron'
+end

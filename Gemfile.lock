@@ -1,10 +1,16 @@
+GIT
+  remote: git://github.com/jessitron/generative.git
+  revision: ce8594b58497dc51cd295bd005603822953aed8a
+  ref: generatron
+  specs:
+    generative (0.1.0)
+      rspec
+
 GEM
   remote: https://rubygems.org/
   specs:
     aqueductron (0.0.2)
     diff-lcs (1.2.5)
-    generative (0.1.0)
-      rspec
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -19,5 +25,5 @@ PLATFORMS
 
 DEPENDENCIES
   aqueductron
-  generative
+  generative!
   rspec
